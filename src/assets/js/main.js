@@ -13,21 +13,6 @@ window.addEventListener('hashchange', () => {
 window.addEventListener('DOMContentLoaded', () => {
   initHeader();
 
-  //////////////////
-  //// Tabs
-  const showCurrentTab = () => {
-    const aboutTabs = FlowbiteInstances.getInstance('Tabs', 'tab-menu--about');
-    if (!aboutTabs) return;
-    const currentTab = window.location.hash;
-    aboutTabs.updateOnShow(() => {
-      window.scrollTo({
-        top: document.querySelector('#tab-content--container').offsetTop - 59 - (59 + 48),
-        behavior: 'smooth',
-      });
-    });
-    if (aboutTabs && currentTab) aboutTabs.show(currentTab);
-  };
-
   //////////////////////////////////////
   //////////////////////////////////////
   //// Initialize global components
@@ -64,7 +49,11 @@ function injectHeader() {
   const $headerContainer = document.getElementById('header-container');
   if (!$headerContainer) return;
 
-  const BASE_PATH = import.meta.env?.BASE_URL || '/';
+  let BASE_PATH = '/';
+
+  if (process.env.NODE_ENV === 'production') {
+    BASE_PATH = '/logn/';
+  }
 
   try {
     const html = `
@@ -189,21 +178,21 @@ function injectHeader() {
               <ul class="flex flex-col text-base text-zinc-500">
                 <li>
                   <a
-                    href="/about"
+                    href="${BASE_PATH}about"
                     class="block px-7 py-3 hover:bg-zinc-100 hover:font-normal active:bg-zinc-100 active:font-normal">
                     About Us
                   </a>
                 </li>
                 <li>
                   <a
-                    href="/about#team"
+                    href="${BASE_PATH}about#team"
                     class="block px-7 py-3 hover:bg-zinc-100 hover:font-normal active:bg-zinc-100 active:font-normal">
                     Team
                   </a>
                 </li>
                 <li>
                   <a
-                    href="/about#news"
+                    href="${BASE_PATH}about#news"
                     class="block px-7 py-3 hover:bg-zinc-100 hover:font-normal active:bg-zinc-100 active:font-normal">
                     News
                   </a>
@@ -213,7 +202,7 @@ function injectHeader() {
           </li>
           <!-- <li>
             <a
-              href="/courses"
+              href="${BASE_PATH}courses"
               class="block px-4 py-3 hover:bg-zinc-100 hover:font-normal active:bg-zinc-100 active:font-normal">
               Courses
             </a>
@@ -237,14 +226,14 @@ function injectHeader() {
               <ul class="flex flex-col text-base text-zinc-500">
                 <li>
                   <a
-                    href="/courses/2025/summer"
+                    href="${BASE_PATH}courses/2025/summer"
                     class="block px-7 py-3 hover:bg-zinc-100 hover:font-normal active:bg-zinc-100 active:font-normal">
                     2025 여름학기 정규반
                   </a>
                 </li>
                 <li>
                   <a
-                    href="/courses/2025/competition"
+                    href="${BASE_PATH}courses/2025/competition"
                     class="block px-7 py-3 hover:bg-zinc-100 hover:font-normal active:bg-zinc-100 active:font-normal">
                     2025 대회 프로그램
                   </a>
@@ -254,14 +243,14 @@ function injectHeader() {
           </li>
           <li>
             <a
-              href="/capstone"
+              href="${BASE_PATH}capstone"
               class="block px-4 py-3 hover:bg-zinc-100 hover:font-normal active:bg-zinc-100 active:font-normal">
               Capstone
             </a>
           </li>
           <!-- <li>
                 <a
-                  href="/personal-project"
+                  href="${BASE_PATH}personal-project"
                   class="block px-4 py-3 hover:bg-zinc-100 hover:font-normal active:bg-zinc-100 active:font-normal">
                   Personal Project
                 </a>
@@ -339,3 +328,18 @@ function initHeaderScroll() {
     }
   });
 }
+
+//////////////////
+//// Tabs
+const showCurrentTab = () => {
+  const aboutTabs = FlowbiteInstances.getInstance('Tabs', 'tab-menu--about');
+  if (!aboutTabs) return;
+  const currentTab = window.location.hash;
+  aboutTabs.updateOnShow(() => {
+    window.scrollTo({
+      top: document.querySelector('#tab-content--container').offsetTop - 59 - (59 + 48),
+      behavior: 'smooth',
+    });
+  });
+  if (aboutTabs && currentTab) aboutTabs.show(currentTab);
+};
