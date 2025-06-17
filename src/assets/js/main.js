@@ -12,6 +12,46 @@ window.addEventListener('hashchange', () => {
 
 window.addEventListener('DOMContentLoaded', () => {
   initHeader();
+
+  //////////////////
+  //// Tabs
+  const showCurrentTab = () => {
+    const aboutTabs = FlowbiteInstances.getInstance('Tabs', 'tab-menu--about');
+    if (!aboutTabs) return;
+    const currentTab = window.location.hash;
+    aboutTabs.updateOnShow(() => {
+      window.scrollTo({
+        top: document.querySelector('#tab-content--container').offsetTop - 59 - (59 + 48),
+        behavior: 'smooth',
+      });
+    });
+    if (aboutTabs && currentTab) aboutTabs.show(currentTab);
+  };
+
+  //////////////////////////////////////
+  //////////////////////////////////////
+  //// Initialize global components
+  document.getElementById('goToTopBtn').addEventListener('click', () => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  });
+
+  //////////////////////////////////////
+  //////////////////////////////////////
+  //// Initialize utilities
+  document.querySelectorAll('.do-toggle-flip').forEach((btn) => {
+    btn.addEventListener('click', () => {
+      const card = btn.closest('.card');
+      card?.classList.toggle('toggle-flip');
+    });
+  });
+
+  Object.entries(LINKS).forEach(([name, url]) => {
+    document.querySelectorAll(`a.link--${name}`).forEach((btn) => {
+      if (btn.tagName !== 'A') return;
+      btn.setAttribute('href', url);
+      btn.setAttribute('target', '_blank');
+    });
+  });
 });
 
 async function initHeader() {
@@ -24,6 +64,8 @@ function injectHeader() {
   const $headerContainer = document.getElementById('header-container');
   if (!$headerContainer) return;
 
+  const BASE_PATH = import.meta.env?.BASE_URL || '/';
+
   try {
     const html = `
     <header
@@ -31,12 +73,12 @@ function injectHeader() {
       class="transition-transform duration-300 fixed sm:absolute start-0 top-0 z-20 w-full sm:bg-linear-to-b from-black/90 to-transparent sm:pb-28">
       <nav
         class="mx-auto flex max-w-screen-xl items-center justify-end px-4 pt-4 md:justify-between lg:px-12">
-        <a href="/" class="hidden w-16 md:block">
+        <a href="${BASE_PATH}" class="hidden w-16 md:block">
           <img class="logo" src="${new URL('../img/logo_en_white.png', import.meta.url)}" alt="" />
         </a>
         <ul class="hidden items-center space-x-8 md:flex">
           <li class="inline-flex items-center gap-1">
-            <a href="/about" class="hover-transition text-white hover:text-zinc-400">About</a>
+            <a href="${BASE_PATH}about" class="hover-transition text-white hover:text-zinc-400">About</a>
             <button
               id="aboutDropdownBtn"
               data-dropdown-toggle="about-dropdown"
@@ -49,19 +91,19 @@ function injectHeader() {
             <div id="about-dropdown" class="z-20 hidden overflow-hidden rounded-sm bg-white shadow-sm">
               <ul class="text-zinc-500" aria-labelledby="aboutDropdownBtn">
                 <li>
-                  <a href="/about" class="block px-4 py-2 hover:bg-zinc-100">About Us</a>
+                  <a href="${BASE_PATH}about" class="block px-4 py-2 hover:bg-zinc-100">About Us</a>
                 </li>
                 <li>
-                  <a href="/about#team" class="block px-4 py-2 hover:bg-zinc-100">Team</a>
+                  <a href="${BASE_PATH}about#team" class="block px-4 py-2 hover:bg-zinc-100">Team</a>
                 </li>
                 <li>
-                  <a href="/about#news" class="block px-4 py-2 hover:bg-zinc-100">News</a>
+                  <a href="${BASE_PATH}about#news" class="block px-4 py-2 hover:bg-zinc-100">News</a>
                 </li>
               </ul>
             </div>
           </li>
           <li class="inline-flex items-center gap-1">
-            <a href="/courses/2025/summer" class="hover-transition text-white hover:text-zinc-400">Courses</a>
+            <a href="${BASE_PATH}courses/2025/summer" class="hover-transition text-white hover:text-zinc-400">Courses</a>
             <button
               data-dropdown-toggle="courses-dropdown"
               data-dropdown-offset-skidding="10"
@@ -75,12 +117,12 @@ function injectHeader() {
               class="z-20 hidden overflow-hidden rounded-sm bg-white shadow-sm">
               <ul class="text-zinc-500">
                 <li>
-                  <a href="/courses/2025/summer" class="block px-4 py-2 hover:bg-zinc-100">
+                  <a href="${BASE_PATH}courses/2025/summer" class="block px-4 py-2 hover:bg-zinc-100">
                     2025 여름학기 정규반
                   </a>
                 </li>
                 <li>
-                  <a href="/courses/2025/competition" class="block px-4 py-2 hover:bg-zinc-100">
+                  <a href="${BASE_PATH}courses/2025/competition" class="block px-4 py-2 hover:bg-zinc-100">
                     2025 대회 프로그램
                   </a>
                 </li>
@@ -88,7 +130,7 @@ function injectHeader() {
             </div>
           </li>
           <li>
-            <a href="/capstone" class="hover-transition text-white hover:text-zinc-400">
+            <a href="${BASE_PATH}capstone" class="hover-transition text-white hover:text-zinc-400">
               Capstone
             </a>
           </li>
@@ -297,43 +339,3 @@ function initHeaderScroll() {
     }
   });
 }
-
-///////////////////
-//// Tabs
-const showCurrentTab = () => {
-  const aboutTabs = FlowbiteInstances.getInstance('Tabs', 'tab-menu--about');
-  if (!aboutTabs) return;
-  const currentTab = window.location.hash;
-  aboutTabs.updateOnShow(() => {
-    window.scrollTo({
-      top: document.querySelector('#tab-content--container').offsetTop - 59 - (59 + 48),
-      behavior: 'smooth',
-    });
-  });
-  if (aboutTabs && currentTab) aboutTabs.show(currentTab);
-};
-
-//////////////////////////////////////
-//////////////////////////////////////
-//// Initialize global components
-document.getElementById('goToTopBtn').addEventListener('click', () => {
-  window.scrollTo({ top: 0, behavior: 'smooth' });
-});
-
-//////////////////////////////////////
-//////////////////////////////////////
-//// Initialize utilities
-document.querySelectorAll('.do-toggle-flip').forEach((btn) => {
-  btn.addEventListener('click', () => {
-    const card = btn.closest('.card');
-    card?.classList.toggle('toggle-flip');
-  });
-});
-
-Object.entries(LINKS).forEach(([name, url]) => {
-  document.querySelectorAll(`a.link--${name}`).forEach((btn) => {
-    if (btn.tagName !== 'A') return;
-    btn.setAttribute('href', url);
-    btn.setAttribute('target', '_blank');
-  });
-});
