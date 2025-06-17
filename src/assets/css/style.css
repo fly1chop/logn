@@ -1,0 +1,152 @@
+@import 'tailwindcss';
+@import 'flowbite/src/themes/default';
+@plugin "flowbite/plugin";
+@plugin "@iconify/tailwind4" {
+  prefix: 'iconify';
+  prefixes: heroicons;
+  scale: 1.5;
+}
+@source "../../../node_modules/flowbite";
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+@theme {
+  --color-flamingo-50: #fef4ee;
+  --color-flamingo-100: #fce7d8;
+  --color-flamingo-200: #f7cbb1;
+  --color-flamingo-300: #f2a67f;
+  --color-flamingo-400: #ec774b;
+  --color-flamingo-500: #e75224;
+  --color-flamingo-600: #d93c1d;
+  --color-flamingo-700: #b42c1a;
+  --color-flamingo-800: #8f251d;
+  --color-flamingo-900: #74211a;
+  --color-flamingo-950: #3e0e0c;
+
+  --breakpoint-xs: 30rem;
+  --breakpoint-2xs: 20rem;
+}
+
+@layer base {
+  html {
+    font-family: 'Noto Sans KR', sans-serif;
+  }
+
+  body {
+    color: var(--color-zinc-950);
+    background-color: var(--color-zinc-100);
+    font-weight: var(--font-weight-light);
+  }
+}
+
+@layer components {
+  .btn {
+    background-color: var(--color-flamingo-500);
+    border-radius: var(--radius-4xl);
+    color: var(--color-zinc-950);
+    font-weight: var(--font-weight-bold);
+    padding: --spacing(1.5) --spacing(4) --spacing(2);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: --spacing(1);
+    cursor: pointer;
+    box-shadow: var(--shadow-md);
+    @apply transition duration-300 ease-in-out;
+  }
+  .btn:hover {
+    @apply opacity-80 shadow-lg;
+  }
+  .btn span[class*='heroicons--'] {
+    @apply transition duration-300 ease-in-out;
+  }
+  .btn:hover span[class*='heroicons--'] {
+    @apply translate-x-1;
+  }
+  .btn.white {
+    color: var(--color-white);
+  }
+  .btn.large {
+    font-size: var(--text-2xl);
+    padding: --spacing(2.5) --spacing(10) --spacing(3.5);
+  }
+}
+
+@utility hover-transition {
+  @apply transition duration-300 ease-in-out;
+}
+
+[class*='heroicons--']:not([class*='iconify-color']) {
+  @apply iconify;
+}
+
+.toggle-flip {
+  transform: rotateY(180deg);
+  transition: transform 0.5s;
+}
+
+.infinite-carousel-container {
+  position: relative;
+  width: 100%;
+}
+
+.carousel-primary,
+.carousel-secondary {
+  top: 0;
+  left: 100%;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  position: absolute;
+  white-space: nowrap;
+}
+
+.carousel-primary img {
+  overflow: hidden;
+  object-position: center;
+  background-color: #fff;
+  border-radius: var(--radius-xs);
+  box-shadow: var(--shadow-sm);
+  @apply ml-3 aspect-video flex-1 object-contain sm:ml-5 sm:object-cover;
+}
+
+.carousel-primary {
+  display: flex;
+  justify-content: space-around;
+  animation: scroll-horizontal 40s linear infinite;
+}
+
+.carousel-secondary {
+  animation: scroll-horizontal 40s linear infinite;
+  animation-delay: 20s;
+}
+
+.infinite-carousel-container:hover > .carousel-primary:not(:hover) {
+  animation-play-state: paused;
+  -webkit-animation-play-state: paused;
+  -moz-animation-play-state: paused;
+}
+.carousel-primary:hover,
+.carousel-primary:hover ~ .carousel-secondary {
+  animation-play-state: paused;
+  -webkit-animation-play-state: paused;
+  -moz-animation-play-state: paused;
+}
+
+.carousel-secondary:hover {
+  animation-play-state: paused;
+  -webkit-animation-play-state: paused;
+  -moz-animation-play-state: paused;
+}
+
+.fade-in {
+  opacity: 1;
+}
+@keyframes scroll-horizontal {
+  0% {
+    left: 100%;
+  }
+  100% {
+    left: -100%;
+  }
+}
