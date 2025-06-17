@@ -6,7 +6,7 @@
     "generate:image-map": "node scripts/generateImageMap.js",
     "dev": "npm run generate:image-map && parcel",
     "prebuild": "shx rm -rf dist/*",
-    "build": "npm run generate:image-map && parcel build",
+    "build": "npm run generate:image-map && parcel build --public-url /logn/",
     "deploy": "push-dir --dir=dist --branch=gh-pages --cleanup --verbose"
   },
   "author": "",
